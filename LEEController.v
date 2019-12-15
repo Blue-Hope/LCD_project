@@ -6,10 +6,10 @@ module controller (
   wire [39:0] micro_instructions;
   wire [1:0] muxout;
 
-  reg [3:0] state;
+  reg [3:0] state = 4'b0000;
   reg [3:0] next_state;
   
-  reg [21:0]b;
+  reg [21:0] b;
   controllerROM rom(state, micro_instructions);
 
   always @ (posedge clk) state = next_state;

@@ -6,13 +6,13 @@ module SAM();
 // TODO: you may alter the type of registers to wire (e.g. reg RW -> wire RW) if necessary
   reg [15:0] PC;
   reg [15:0] AC, MAR, MBR, IR;
-  reg [15:0] ABUS, RBUS, MBUS;
+  wire [15:0] ABUS, RBUS, MBUS;
   reg [15:0] ADDRESS_BUS, DATA_BUS;
   reg RW, REQUEST;
   wire WAIT;
 
   reg [15:0] ALU_A, ALU_B;
-  reg ALU_ADD, ALU_PASS_B;
+  wire ALU_ADD, ALU_PASS_B;
   reg [15:0] ALU_RESULT;
 
   wire [21:0] b;
@@ -29,7 +29,7 @@ module SAM();
     AC = 0;
     IR = 0;
     ADDRESS_BUS = 0;
-    RW = 1;
+    //RW = 1;
     REQUEST = 1;
     ALU_A = 'bz;
     ALU_B = 'bz;
@@ -48,42 +48,34 @@ module SAM();
     // TODO: refer to lecture note, page 46 
     // ->DONE(DAHYUN) CHECK NEEDED
     // Example 1. clk-synchrinized implementation
-    if		(b[21]) ABUS = PC;
-    if		(b[20]) ABUS = IR;
-    if		(b[19]) ABUS = MBR;
     if  (b[18]) AC = RBUS;
-    if  (b[17]) ALU_A = AC;
-    if  (b[16]) ALU_B = MBUS;
-    ALU_ADD = b[15];
-    ALU_PASS_B = b[14];
     if  (b[13]) ADDRESS_BUS = MAR;
     if  (b[12]) DATA_BUS = MBR;
     if  (b[11]) IR = ABUS;
     if  (b[10]) MAR = ABUS;
-    if  (b[9]) MBR = DATA_BUS;
     if  (b[8]) MBR = RBUS;
-    if  (b[7]) MBUS = MBR;
     if  (b[6]) PC = 0;
     if  (b[5]) PC = PC + 2;
     if  (b[4]) PC = ABUS;
     RW = b[3];
     REQUEST = b[2];
-    if  (b[1]) RBUS = AC;
-    if  (b[0]) RBUS = ALU_RESULT;
 
 
   end
 
-/* Example 2. register without clk
-  always @ (b or PC or IR or MBR) begin
-    if (b[21]) ABUS = PC;
-    if (b[20]) ABUS = IR;
-    if (b[19]) ABUS = MBR;
+/* Example 2. register without clk */
+  always @ (b or AC or MBUS or DATA_BUS or RBUS) begin
+    if (b[17]) ALU_A = AC;
+    if (b[16]) ALU_B = MBUS;
+    if (~b[16]) ALU_B = 'bz;
+    if (b[9]) MBR = DATA_BUS;
   end
-*/
 
-/* Example 3. wire-based
+/* Example 3. wire-based */
   assign ABUS = b[21] ? PC : (b[20] ? IR : (b[19] ? MBR : 'bz));
-  Note that you need to change ABUS's type as wire in this case (wire ABUS)
-*/
+  assign RBUS = b[1] ? AC : (b[0] ? ALU_RESULT : 'bz);
+  assign MBUS = b[7] ? MBR : 'bz;
+  assign ALU_ADD = b[15];
+  assign ALU_PASS_B = b[14];
+
 endmodule

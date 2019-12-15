@@ -14,10 +14,10 @@ module Memory(
 
   integer i;
   initial begin
-    mem[132] = 8'hab;
-    mem[133] = 8'hce;
     /* In this sample testcode, you are expected to have
          
+          mem[132] = 8'hab;
+          mem[133] = 8'hce;
        at 61ns time.
     */
     wait_ = 1;
