@@ -29,9 +29,13 @@ module SAM();
     AC = 0;
     IR = 0;
     ADDRESS_BUS = 0;
+    RW = 1;
+    REQUEST = 1;
+    ALU_A = 'bz;
+    ALU_B = 'bz;
   end
   always begin
-    #1 clk = ~clk;
+    clk = ~clk; #1;
   end
 
   // ALU implementation
