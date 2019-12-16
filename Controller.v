@@ -15,7 +15,7 @@ module controller (
   always @ (posedge clk) state = next_state;
   // TODO: write codes to implement controller in lecture note, page 59
   always @(*) begin
-    case (micro_instructions[39-38])
+    case (micro_instructions[39:38])
     2'b00: 
       if (wait_ == 0) begin
         case(AC15)
@@ -48,5 +48,5 @@ module controller (
     b = micro_instructions[21:0];
   end
   
-  assign bus_controller = b;   
+  assign bus_controller = micro_instructions[21:0];   
 endmodule

@@ -49,7 +49,7 @@ module SAM();
     // ->DONE(DAHYUN) CHECK NEEDED
     // Example 1. clk-synchrinized implementation
     if  (b[18]) AC = RBUS;
-    if  (b[13]) ADDRESS_BUS = MAR;
+    if  (b[13]) ADDRESS_BUS = MAR[7:0];
     if  (b[12]) DATA_BUS = MBR;
     if  (b[11]) IR = ABUS;
     if  (b[10]) MAR = ABUS;
